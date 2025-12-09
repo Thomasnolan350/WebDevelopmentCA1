@@ -1,38 +1,48 @@
+import java.util.ArrayList;
+import java.util.Map;
+import org.apache.struts2.interceptor.SessionAware;
 
-public class RegisterClass {
-	
-	//declare variables of the same name as the webpage paramters taken in
-	private String userName;
-	private String password;
+public class RegisterClass implements SessionAware {
 
-	public RegisterClass() {
+    private String userName;
+    private String password;
 
-	}
-	
-	public String registration() {
-		return "SUCCESS";
-	}
+    // list of all usernames for the iterator demo
+    private ArrayList<String> allUsernames = new ArrayList<>();
 
-	public String getUserName() {
-		return userName;
-	}
+    // Struts session map
+    private Map<String, Object> session;
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public RegisterClass() {}
 
-	public String getPassword() {
-		return password;
-	}
+    public String registration() {
+        // put the current user in the session
+        session.put("currentUser", userName);
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	
-	
-	
+        // populate the list like in the lab
+        allUsernames.add("Tom");
+        allUsernames.add("Mary");
+        allUsernames.add("Terry");
+        allUsernames.add(userName);  // the one who just registered
 
-	
+        // we could also save allUsernames in session if we want
+        session.put("allUsernames", allUsernames);
 
+        return "SUCCESS";
+    }
+
+    // getters & setters (Struts needs these)
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public ArrayList<String> getAllUsernames() { return allUsernames; }
+    public void setAllUsernames(ArrayList<String> allUsernames) { this.allUsernames = allUsernames; }
+
+    @Override
+    public void setSession(Map<String, Object> session) {
+        this.session = session;
+    }
 }
